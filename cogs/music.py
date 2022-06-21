@@ -83,9 +83,10 @@ class Music(commands.Cog):
     # disconnect bot from voice channel
     @commands.command()
     async def disconnect(self, ctx):
-        if ctx.voice_client is None:
-            return await ctx.send("I am not in a channel.")
-        return await ctx.voice_client.disconnect()
+        if ctx.voice_client:
+            return await ctx.voice_client.disconnect()
+        await ctx.send("I am not in a channel.")
+        
 
 
 # adds the cog to our bot
