@@ -38,6 +38,8 @@ class Music(commands.Cog):
     # searches for requested songs and adds to queue if already playing one
     @commands.command()
     async def play(self, ctx, *args):
+        if ctx.author.voice is None:
+            return await ctx.send("You must be in a voice channel first.")
         query = " ".join(args)
 
         song = self.search(query)
@@ -58,7 +60,7 @@ class Music(commands.Cog):
     @commands.command()
     async def skip(self, ctx):
         if ctx.voice_client is None:
-            await ctx.send("No song to skip.")
+            return await ctx.send("No song to skip.")
         
         await ctx.send("Skipping song")
         ctx.voice_client.stop()
@@ -66,16 +68,23 @@ class Music(commands.Cog):
     # pause current song that is playing
     @commands.command()
     async def pause(self, ctx):
+        if ctx.voice_client is None:
+            return await ctx.send("No song to pause.")
+        await ctx.send("Music paused. Type ```!resume``` to play.")
         await ctx.voice_client.pause()
 
     # resume a paused song
     @commands.command()
     async def resume(self, ctx):
+        if ctx.voice_client is None:
+            return await ctx.send("No song to resume.")
         await ctx.voice_client.resume()
 
     # disconnect bot from voice channel
     @commands.command()
     async def disconnect(self, ctx):
+        if ctx.voice_client is None:
+            return await ctx.send("I am not in a channel.")
         await ctx.voice_client.disconnect()
 
 
