@@ -70,7 +70,7 @@ class Music(commands.Cog):
     async def pause(self, ctx):
         if ctx.voice_client is None:
             return await ctx.send("No song to pause.")
-        await ctx.send("Music paused. Type ```!resume``` to play.")
+        await ctx.send("Music paused. Type !resume to play.")
         await ctx.voice_client.pause()
 
     # resume a paused song
@@ -85,7 +85,7 @@ class Music(commands.Cog):
     async def disconnect(self, ctx):
         if ctx.voice_client is None:
             return await ctx.send("I am not in a channel.")
-        await ctx.voice_client.disconnect()
+        return await ctx.voice_client.disconnect()
 
 
 # adds the cog to our bot
