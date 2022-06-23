@@ -3,7 +3,7 @@ from discord.ext import commands
 import os
 
 
-BOT_prefix = "!"
+BOT_prefix = "#"
 BOT_token = os.environ.get("RO_TOKEN")
 intents = discord.Intents.default()
 
