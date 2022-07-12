@@ -39,7 +39,7 @@ class Music(commands.Cog):
     @commands.command()
     async def queue(self, ctx):
         if len(self.queue) == 0:
-            await ctx.send("There are currently no songs in the queue.")
+            await ctx.send("There are currently no songs in the Queue.")
         else:
             embed = discord.Embed(title="Music Queue")
             song_titles, num = '', 1
@@ -47,7 +47,7 @@ class Music(commands.Cog):
                 song_titles += "{}. {}\n".format(num, song['title'])
                 num += 1
             embed.add_field(name="Songs/Videos", value=song_titles)
-            embed.set_footer(text="This bot will leave at the end of the queue.")
+            embed.set_footer(text="This bot will leave at the end of the Queue.")
             return await ctx.send(embed=embed)
 
     # searches for requested songs and adds to queue if already playing one
@@ -55,19 +55,20 @@ class Music(commands.Cog):
     async def play(self, ctx, *args):
         if ctx.author.voice is None:
             return await ctx.send("You must be in a voice channel first.")
+        
         query = " ".join(args)
-
         song = self.search(query)
-
         url = song['link']
 
         if ctx.voice_client is None:
             await ctx.author.voice.channel.connect()
 
         if ctx.voice_client.is_playing() is True:
-            self.queue.append(song)
-            await ctx.send("Song added to Queue.")
-            return None
+            if len(self.queue) <= 10:
+                self.queue.append(song)
+                return await ctx.send("Song added to Queue.")
+            else:
+                return await ctx.send("Max length of Queue reached.")
         
         await self.play_song(ctx, song)
 
