@@ -35,6 +35,21 @@ class Music(commands.Cog):
         ctx.voice_client.play(PCMVolumeTransformer(FFmpegPCMAudio(url, **self.FFMPEG_OPTIONS)), 
                         after=lambda error: self.client.loop.create_task(self.check_queue(ctx)))
 
+    # displays an embed of currently queued songs
+    @commands.command()
+    async def queue(self, ctx):
+        if len(self.queue) == 0:
+            await ctx.send("There are currently no songs in the queue.")
+        else:
+            embed = discord.Embed(title='Music Queue')
+            song_titles, num = '', 1
+            for song in self.queue:
+                song_titles += '{}. {}\n'.format(num, song['title'])
+                num += 1
+            embed.add_field(name='Songs/Videos', value=song_titles)
+            embed.set_footer(text='This bot will leave at the end of the queue.')
+            return await ctx.send(embed=embed)
+
     # searches for requested songs and adds to queue if already playing one
     @commands.command()
     async def play(self, ctx, *args):
@@ -84,9 +99,7 @@ class Music(commands.Cog):
     @commands.command()
     async def disconnect(self, ctx):
         if ctx.voice_client:
-            return await ctx.voice_client.disconnect()
-        await ctx.send("I am not in a channel.")
-        
+            return await ctx.voice_client.disconnect()       
 
 
 # adds the cog to our bot
