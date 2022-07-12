@@ -41,13 +41,13 @@ class Music(commands.Cog):
         if len(self.queue) == 0:
             await ctx.send("There are currently no songs in the queue.")
         else:
-            embed = discord.Embed(title='Music Queue')
+            embed = discord.Embed(title="Music Queue")
             song_titles, num = '', 1
             for song in self.queue:
-                song_titles += '{}. {}\n'.format(num, song['title'])
+                song_titles += "{}. {}\n".format(num, song['title'])
                 num += 1
-            embed.add_field(name='Songs/Videos', value=song_titles)
-            embed.set_footer(text='This bot will leave at the end of the queue.')
+            embed.add_field(name="Songs/Videos", value=song_titles)
+            embed.set_footer(text="This bot will leave at the end of the queue.")
             return await ctx.send(embed=embed)
 
     # searches for requested songs and adds to queue if already playing one
@@ -98,6 +98,7 @@ class Music(commands.Cog):
     # disconnect bot from voice channel
     @commands.command()
     async def disconnect(self, ctx):
+        self.queue = []
         if ctx.voice_client:
             return await ctx.voice_client.disconnect()       
 
