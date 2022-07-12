@@ -55,20 +55,20 @@ class Music(commands.Cog):
     async def play(self, ctx, *args):
         if ctx.author.voice is None:
             return await ctx.send("You must be in a voice channel first.")
-        
-        query = " ".join(args)
-        song = self.search(query)
-        url = song['link']
+
+        if len(self.queue) < 10:
+            query = " ".join(args)
+            song = self.search(query)
+            url = song['link']
+        else:
+            return await ctx.send("Max length of Queue reached.")
 
         if ctx.voice_client is None:
             await ctx.author.voice.channel.connect()
 
         if ctx.voice_client.is_playing() is True:
-            if len(self.queue) <= 10:
-                self.queue.append(song)
-                return await ctx.send("Song added to Queue.")
-            else:
-                return await ctx.send("Max length of Queue reached.")
+            self.queue.append(song)
+            return await ctx.send("Song added to Queue.")
         
         await self.play_song(ctx, song)
 
